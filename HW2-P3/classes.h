@@ -92,6 +92,7 @@ public:
     void clearScreen();
     void setBackgroundColor(float r, float g, float b);
     void setColor(float r, float g, float b);
+    void setColorfv(float c[]);
     void lineTo(float x, float y);
     void lineTo(Point2 p);
     void lineRel(float dx, float dy);

@@ -18,7 +18,7 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\HW2-P2\HW2-P2\classes.cpp">
+    <ClCompile Include="classes.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
