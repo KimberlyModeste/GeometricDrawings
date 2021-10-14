@@ -13,19 +13,42 @@ Canvas cvs(640, 640, title);
 GLint p = 1;
 int clicker = 1;
 
+void drawA(int x, int y) {
+
+}
+
+void drawB(int x, int y) {
+
+}
+
+void drawC(int x, int y) {
+
+}
+
+void drawD(int x, int y) {
+
+}
+
 void myMouse(int button, int state, int x, int y) {
 
-	srand(time(0));
 	if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN)
 	{
-		float color1[3] = { ((float)rand() / (RAND_MAX)), ((float)rand() / (RAND_MAX)), ((float)rand() / (RAND_MAX)) };
-		float color2[3] = { ((float)rand() / (RAND_MAX)), ((float)rand() / (RAND_MAX)), ((float)rand() / (RAND_MAX)) };
-		float color3[3] = { ((float)rand() / (RAND_MAX)), ((float)rand() / (RAND_MAX)), ((float)rand() / (RAND_MAX)) };
-		float color4[3] = { ((float)rand() / (RAND_MAX)), ((float)rand() / (RAND_MAX)), ((float)rand() / (RAND_MAX)) };
+		if (clicker == 1)
+			drawA(x, 680-y);
 
-		cout << x << " " << 640 - y << endl;
+		else if (clicker == 2)
+			drawB(x, 680 - y);
 
+		else if (clicker == 3)
+			drawC(x, 680 - y);
+
+		else if (clicker == 4)
+			drawD(x, 680 - y);
+
+		cout << "In clicker my numeber is " << clicker << endl;
+		
 	}
+	
 }
 
 void mainMenu(int id) {
@@ -84,6 +107,21 @@ void pixelMenu(int id) {
 	glPointSize(p);
 }
 
+void display() {
+
+	cvs.clearScreen();
+	cvs.setBackgroundColor(1.0, 1.0, 1.0);
+	cvs.setColor(0.0, 0.0, 0.0);
+	cvs.setWindow(-10.0, 10.0, -10.0, 10.0);
+	cvs.setViewport(10, 460, 10, 460);
+
+
+	//Mouse stuff
+	glutMouseFunc(myMouse);
+	glFlush();
+}
+
+
 void main(int argc, char** argv)
 {
 	//color for lines and line thickness
@@ -103,7 +141,7 @@ void main(int argc, char** argv)
 	glutAddMenuEntry("Increase Pixel Size", 1);
 	glutAddMenuEntry("Decrease Pixel Size", 2);
 
-	
+
 	glutCreateMenu(mainMenu);
 	glutAddSubMenu("Colors", c_menu);
 	glutAddSubMenu("Pixel Size", p_menu);
@@ -112,13 +150,9 @@ void main(int argc, char** argv)
 	glutAddMenuEntry("Shape C", 3);
 	glutAddMenuEntry("Shape D", 4);
 	glutAddMenuEntry("Quit", 5);
+
 	glutAttachMenu(GLUT_RIGHT_BUTTON);
 
-	glutMouseFunc(myMouse);
-
-
-
+	glutDisplayFunc(display);
 	glutMainLoop();
-
-
 }
