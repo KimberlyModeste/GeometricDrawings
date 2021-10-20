@@ -12,9 +12,10 @@ Canvas cvs(640, 640, title);
 Point2 outer[7];
 Point2 inner[7];
 bool isOut;
+bool clearOutline;
 
 GLint p = 1;
-int clicker = 1;
+int clicker = 4;
 bool hasClicked = false;
 float currentColor[] = { 0.0,0.0,0.0 };
 
@@ -23,7 +24,7 @@ void ngon(int n, float cx, float cy, float radius, float rotAngle) {
 	double angle = rotAngle * 3.14159265 / 180;
 	double angleInc = 2 * 3.14159265 / n;
 	cvs.moveTo(radius * cos(angle) + cx, radius * sin(angle) + cy);
-	if (!isOut)
+	if (clearOutline)
 		cvs.setColor(1.0, 1.0, 1.0);
 
 	for (int k = 0; k <= n; k++)
@@ -33,51 +34,114 @@ void ngon(int n, float cx, float cy, float radius, float rotAngle) {
 
 		if (isOut)
 			outer[k].set(radius * cos(angle) + cx, radius * sin(angle) + cy);
-		else
+		else if (!isOut)
 			inner[k].set(radius * cos(angle) + cx, radius * sin(angle) + cy);
 	}
 }
 
 
-
-
 void drawA(int x, int y) {
-	GLint o1[] = { outer[1].getX(), outer[1].getY() };
-	GLint o2[] = { outer[2].getX(), outer[2].getY() };
-	GLint o3[] = { outer[3].getX(), outer[3].getY() };
-
-	GLint i1[] = { inner[1].getX(), inner[1].getY() };
-	GLint i2[] = { inner[2].getX(), inner[2].getY() };
-	GLint i3[] = { inner[3].getX(), inner[3].getY() };
-
+	
 	isOut = true;
+	clearOutline = false;
 	ngon(3, x, y, 50.0, 90.0);
+
 	isOut = false;
+	clearOutline = true;
 	ngon(3, x, y, 5.0, 30.0);
 	cvs.setColorfv(currentColor);
-	cvs.moveTo(outer[1]);
-	cvs.lineTo(inner[1]);
-	cvs.lineTo(outer[3]);
-	cvs.lineTo(inner[3]);
+	cvs.moveTo(outer[0]);
+	cvs.lineTo(inner[0]);
 	cvs.lineTo(outer[2]);
 	cvs.lineTo(inner[2]);
 	cvs.lineTo(outer[1]);
+	cvs.lineTo(inner[1]);
+	cvs.lineTo(outer[0]);
 }
 
 void drawB(int x, int y) {
 
+	isOut = true;
+	clearOutline = false;
 	ngon(5, x, y, 50.0, 18.0);
+
+	isOut = false;
+	clearOutline = true;
+	ngon(5, x, y, 5.0, 53.0);
+	cvs.setColorfv(currentColor);
+	cvs.moveTo(outer[0]);
+	cvs.lineTo(inner[4]);
+	cvs.lineTo(outer[4]);
+	cvs.lineTo(inner[3]);
+	cvs.lineTo(outer[3]);
+	cvs.lineTo(inner[2]);
+	cvs.lineTo(outer[2]);
+	cvs.lineTo(inner[1]);
+	cvs.lineTo(outer[1]);
+	cvs.lineTo(inner[0]);
+	cvs.lineTo(outer[0]);
+
 }
 
 void drawC(int x, int y) {
-
+	clearOutline = true;
+	
+	isOut = true;
 	ngon(7, x, y, 50.0, 38.5);
+	isOut = false;
+	ngon(7, x, y, 10.0, 13.0);
+
+	cvs.setColorfv(currentColor);
+	cvs.moveTo(outer[0]);
+	cvs.lineTo(inner[1]);
+	cvs.lineTo(outer[1]);
+	cvs.lineTo(inner[2]);
+	cvs.lineTo(outer[2]);
+	cvs.lineTo(inner[3]);
+	cvs.lineTo(outer[3]);
+	cvs.lineTo(inner[4]);
+	cvs.lineTo(outer[4]);
+	cvs.lineTo(inner[5]);
+	cvs.lineTo(outer[5]);
+	cvs.lineTo(inner[6]);
+	cvs.lineTo(outer[6]);
+	cvs.lineTo(inner[0]);
+	cvs.lineTo(outer[0]);
+
 
 }
 
 void drawD(int x, int y) {
-
+	
+	isOut = true;
+	clearOutline = false;
 	ngon(6, x, y, 50.0, 90.0);
+	isOut = NULL;
+	clearOutline = false;
+	ngon(60, x, y, 15.0, 0.0);
+	isOut = false;
+	clearOutline = true;
+	ngon(6, x, y, 15.0, 0.0);
+
+	cvs.setColorfv(currentColor);
+	cvs.moveTo(outer[0]);
+	cvs.lineTo(inner[1]);
+	cvs.lineTo(outer[5]);
+	cvs.lineTo(inner[0]);
+	cvs.lineTo(outer[4]);
+	cvs.lineTo(inner[5]);
+	cvs.lineTo(outer[3]);
+	cvs.lineTo(inner[4]);
+	cvs.lineTo(outer[2]);
+	cvs.lineTo(inner[3]);
+	cvs.lineTo(outer[1]);
+	cvs.lineTo(inner[2]);
+	cvs.lineTo(outer[0]);
+
+	clearOutline = false;
+	ngon(50, x, y, 15.0, 0.0);
+	
+
 }
 
 void myMouse(int button, int state, int x, int y) {
