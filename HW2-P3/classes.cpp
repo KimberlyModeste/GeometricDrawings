@@ -7,7 +7,7 @@ void Canvas::moveTo(float x, float y)
 
 //draws a line from current point to new point
 void Canvas::lineTo(float x, float y) {
-    glBegin(GL_LINES);
+    glBegin(GL_LINE_STRIP);
     glVertex2f((GLfloat)CP.getX(), (GLfloat)CP.getY());
     glVertex2f((GLfloat)x, (GLfloat)y); //draw the line
     glEnd();
@@ -58,7 +58,7 @@ void Canvas::setColorfv(float c[])
 }
 
 void Canvas::lineTo(Point2 p) {
-    glBegin(GL_QUADS);
+    glBegin(GL_LINES);
 
     glVertex2f((GLfloat)CP.getX(), (GLfloat)CP.getY());
     glVertex2f((GLfloat)p.getX(), (GLfloat)p.getY());
@@ -97,6 +97,32 @@ float Canvas::getWindowAspectRatio(void) {
     aspectRatio = width / height;
     return aspectRatio;
 }
+
+void Canvas::forward(float dist, int vis)
+{
+#define RadPerDeg 0.017453393 //radians per degree 
+	float x = CP.getX() + dist * cos(RadPerDeg * CD);
+	float y = CP.getY() + dist * sin(RadPerDeg * CD);
+	if (vis) lineTo(x, y);
+	else moveTo(x, y);
+    CP.set(x, y);
+}
+
+void Canvas::ngon(int n, float cx, float cy, float radius)
+{
+#define RadPerDeg 0.017453393 //radians per degree
+	if (n < 3)
+		return; // bad number of sides
+	double angle = 0, angleInc = 2 * 3.14159265 / n; //angle increment
+	moveTo(cx + radius, cy);
+	for (int k = 1; k <= n; k++)
+	{
+		angle += angleInc;
+		lineTo(radius * cos(angle) + cx, radius * sin(angle) + cy);
+	}
+}
+
+
 
 void Canvas::moveRel(float dx, float dy) {
     CP.set(CP.getX() + dx, CP.getY() + dy);

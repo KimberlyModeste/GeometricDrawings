@@ -9,24 +9,75 @@
 using namespace std;
 char title[] = "Geometric Jamboree";
 Canvas cvs(640, 640, title);
+Point2 outer[7];
+Point2 inner[7];
+bool isOut;
 
 GLint p = 1;
 int clicker = 1;
+bool hasClicked = false;
+float currentColor[] = { 0.0,0.0,0.0 };
+
+void ngon(int n, float cx, float cy, float radius, float rotAngle) {
+	if (n < 3) return;
+	double angle = rotAngle * 3.14159265 / 180;
+	double angleInc = 2 * 3.14159265 / n;
+	cvs.moveTo(radius * cos(angle) + cx, radius * sin(angle) + cy);
+	if (!isOut)
+		cvs.setColor(1.0, 1.0, 1.0);
+
+	for (int k = 0; k <= n; k++)
+	{
+		cvs.lineTo(radius * cos(angle) + cx, radius * sin(angle) + cy);
+		angle += angleInc;
+
+		if (isOut)
+			outer[k].set(radius * cos(angle) + cx, radius * sin(angle) + cy);
+		else
+			inner[k].set(radius * cos(angle) + cx, radius * sin(angle) + cy);
+	}
+}
+
+
+
 
 void drawA(int x, int y) {
+	GLint o1[] = { outer[1].getX(), outer[1].getY() };
+	GLint o2[] = { outer[2].getX(), outer[2].getY() };
+	GLint o3[] = { outer[3].getX(), outer[3].getY() };
 
+	GLint i1[] = { inner[1].getX(), inner[1].getY() };
+	GLint i2[] = { inner[2].getX(), inner[2].getY() };
+	GLint i3[] = { inner[3].getX(), inner[3].getY() };
+
+	isOut = true;
+	ngon(3, x, y, 50.0, 90.0);
+	isOut = false;
+	ngon(3, x, y, 5.0, 30.0);
+	cvs.setColorfv(currentColor);
+	cvs.moveTo(outer[1]);
+	cvs.lineTo(inner[1]);
+	cvs.lineTo(outer[3]);
+	cvs.lineTo(inner[3]);
+	cvs.lineTo(outer[2]);
+	cvs.lineTo(inner[2]);
+	cvs.lineTo(outer[1]);
 }
 
 void drawB(int x, int y) {
 
+	ngon(5, x, y, 50.0, 18.0);
 }
 
 void drawC(int x, int y) {
+
+	ngon(7, x, y, 50.0, 38.5);
 
 }
 
 void drawD(int x, int y) {
 
+	ngon(6, x, y, 50.0, 90.0);
 }
 
 void myMouse(int button, int state, int x, int y) {
@@ -34,21 +85,20 @@ void myMouse(int button, int state, int x, int y) {
 	if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN)
 	{
 		if (clicker == 1)
-			drawA(x, 680-y);
+			drawA(x, 640 - y);
 
 		else if (clicker == 2)
-			drawB(x, 680 - y);
+			drawB(x, 640 - y);
 
 		else if (clicker == 3)
-			drawC(x, 680 - y);
+			drawC(x, 640 - y);
 
 		else if (clicker == 4)
-			drawD(x, 680 - y);
+			drawD(x, 640 - y);
 
-		cout << "In clicker my numeber is " << clicker << endl;
-		
+		hasClicked = true;
 	}
-	
+
 }
 
 void mainMenu(int id) {
@@ -62,38 +112,66 @@ void mainMenu(int id) {
 }
 
 void colorsMenu(int id) {
-	
+
 	//Red
 	if (id == 1)
+	{
 		cvs.setColor(1.0, 0.0, 0.0);
-	
+		currentColor[0] = 1.0;  currentColor[1] = 0.0; currentColor[2] = 0.0;
+	}	
+
 	//Green
 	else if (id == 2)
+	{
 		cvs.setColor(0.0, 1.0, 0.0);
-	
+		currentColor[0] = 0.0;  currentColor[1] = 1.0; currentColor[2] = 0.0;
+	}
+
 	//Blue
 	else if (id == 3)
+	{
 		cvs.setColor(0.0, 0.0, 1.0);
+		currentColor[0] = 0.0;  currentColor[1] = 0.0; currentColor[2] = 1.0;
+	}
 
 	//Cyan
 	else if (id == 4)
+	{
 		cvs.setColor(0.0, 1.0, 1.0);
+		currentColor[0] = 0.0;  currentColor[1] = 1.0; currentColor[2] = 1.0;
+	}
 
 	//Magenta
 	else if (id == 5)
+	{
 		cvs.setColor(1.0, 0.0, 1.0);
+		currentColor[0] = 1.0;  currentColor[1] = 0.0; currentColor[2] = 1.0;
+
+	}
 
 	//Yellow
 	else if (id == 6)
+	{
 		cvs.setColor(1.0, 1.0, 0.0);
+		currentColor[0] = 1.0;  currentColor[1] = 1.0; currentColor[2] = 0.0;
+
+	}
 
 	//Orange
 	else if (id == 7)
+	{
 		cvs.setColor(0.98, 0.63, 0.12);
+		currentColor[0] = 0.98;  currentColor[1] = 0.63; currentColor[2] = 0.12;
+
+	}
 
 	//Black
 	else if (id == 8)
+	{
 		cvs.setColor(0.0, 0.0, 0.0);
+		currentColor[0] = 0.0;  currentColor[1] = 0.0; currentColor[2] = 0.0;
+
+	}
 }
 
 void pixelMenu(int id) {
@@ -109,16 +187,18 @@ void pixelMenu(int id) {
 
 void display() {
 
-	cvs.clearScreen();
+	if (!hasClicked)
+	{
+		cvs.clearScreen();
+		cvs.setColor(0.0, 0.0, 0.0);
+	}		
 	cvs.setBackgroundColor(1.0, 1.0, 1.0);
-	cvs.setColor(0.0, 0.0, 0.0);
-	cvs.setWindow(-10.0, 10.0, -10.0, 10.0);
-	cvs.setViewport(10, 460, 10, 460);
-
+	cvs.setWindow(0.0, 640.0, 0.0, 640.0);
+	cvs.setViewport(0, 640, 0, 640);
 
 	//Mouse stuff
 	glutMouseFunc(myMouse);
-	glFlush();
+
 }
 
 
@@ -154,5 +234,6 @@ void main(int argc, char** argv)
 	glutAttachMenu(GLUT_RIGHT_BUTTON);
 
 	glutDisplayFunc(display);
+	glFlush();
 	glutMainLoop();
 }

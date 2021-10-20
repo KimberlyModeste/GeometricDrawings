@@ -97,6 +97,8 @@ public:
     void lineTo(Point2 p);
     void lineRel(float dx, float dy);
     void moveTo(float x, float y);
+    void forward(float dist, int vis);
+    void ngon(int n, float cx, float cy, float radius);
     void moveTo(Point2 p);
     void moveRel(float dx, float dy);
 
@@ -104,6 +106,6 @@ private:
     Point2 CP;         //current position in the world
     IntRect viewport;  //the current viewport
     RealRect window;   //the current window
-
+    float CD;
 };
 #endif
