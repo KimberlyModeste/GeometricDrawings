@@ -45,7 +45,7 @@ void drawA(int x, int y) {
 
 	isOut = false;
 
-	ngon(3, x, y, 5.0, 30.0);
+	ngon(3, x, y+4, 5.0, 30.0);
 	cvs.moveTo(outer[0]);
 	cvs.lineTo(inner[0]);
 	cvs.lineTo(outer[2]);
